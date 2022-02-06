@@ -12,12 +12,6 @@ class ImageMap(private val width: Int, private val height: Int) {
     val energyBuffer = MutableList(height) { MutableList(width) { Double.MAX_VALUE } }
     val shortestPath= mutableListOf<Pair<Int, Int>>()
 
-    fun dropPath() {
-        for (pixel in shortestPath) {
-
-        }
-    }
-
     fun prepareVerticalRoutes() {
         for (x in 0 until width) {
             pathArray[0][x] = listOf(x to 0)
@@ -107,12 +101,5 @@ class ImageMap(private val width: Int, private val height: Int) {
         }
 
         energyBuffer[currentY][x] += energyBuffer[currentY][x] + minXValue
-    }
-
-    fun refreshBuffer() {
-        pathArray = Array(height) { Array(width) { emptyList() } }
-        /*for (y in pathArray.indices) {
-            pathArray[y][0] = listOf(0 to y)
-        }*/
     }
 }
