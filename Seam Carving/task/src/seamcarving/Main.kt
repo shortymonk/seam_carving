@@ -4,28 +4,32 @@ import java.io.File
 import javax.imageio.ImageIO
 
 fun main(args: Array<String>) {
-    val imageName = args[1]     //"./Seam Carving/task/test/blue.png"
+    val imageName = args[1]
     val inputImage = File(imageName)
     val image = ImageIO.read(inputImage)
-    val newWidth = 125
-    val newHeight = 50
+    val seemCarver = Carver()
+    val newWidth = args[5].toInt()
+    val newHeight = args[7].toInt()
 
-    var tmpImage = image
-    repeat(newWidth) {
-        val resizer = ImageResizer(tmpImage)
-        resizer.energize()
-        resizer.findVerticalRoute()
-        tmpImage = resizer.carveVerticalSeam()
+    seemCarver.fillColorMatrix(image)
+    repeat (newWidth) {
+        seemCarver.fillEnergyMatrix()
+        seemCarver.fillRoutes()
+        seemCarver.dropSeam()
     }
 
-    repeat(newHeight) {
-        val resizer = ImageResizer(tmpImage)
-        resizer.energize()
-        resizer.findHorizontalRoute()
-        tmpImage = resizer.carveHorizontalSeam()
+    seemCarver.rotateMatrix()
+    repeat (newHeight) {
+        seemCarver.fillEnergyMatrix()
+        seemCarver.fillRoutes()
+        seemCarver.dropSeam()
     }
 
-    val outputImageName = args[3]   //"outImage.png"
+    seemCarver.rotateMatrix()
+
+    val newImage = seemCarver.getNewImage()
+
+    val outputImageName = args[3]
     val outputImageFile = File(outputImageName)
-    ImageIO.write(tmpImage, "png", outputImageFile)
+    ImageIO.write(newImage, "png", outputImageFile)
 }
